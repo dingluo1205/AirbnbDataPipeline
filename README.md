@@ -10,7 +10,7 @@ The scope of this project is to gather data from this open data source, load the
 There are two types of data in this project. One is csv/csv.gz, and another is geojson. 
 
 ### Files 
-There are mainly four files - calendar, reviews, listings, and neighbourhood. The neighbourhood is a geojson file. It can be used for visualization purpose.
+There are mainly three files - calendar, reviews, and listings. Listings are saved in csv file, while the other two are saved in csv gz files. 
 
 Calendar - including listing id and the price and availability for that day
 
@@ -18,7 +18,7 @@ Reviews - including unique id for each reviewer and detailed comments
 
 Listings - including full descriptions and average review score for each listing 
 
-The files are stored per city and per month. So I stored them separately in my S3 bucket, paritioned on month. 
+The files are stored per city and per month. So I stored them separately in my S3 bucket, paritioned on month and city. 
 
 ## Section 3: Define the Data Model
 In this project, I used star schema to deisgn the data model. Please refer to the design below - 
@@ -26,7 +26,7 @@ In this project, I used star schema to deisgn the data model. Please refer to th
 ![Data Model](/data%20diagram.png)
 
 ## Section 4: Run ETL to Model the Data in Airflow 
-The reason why I chose airflow is that the whole end-to-end data ingestion needs to be done at monthly basis. Every month, Inside Airbnb will provide new month's data in their website. In this way, the jobs need to run at once in a month, and if it fails, backfill will be needed. I've configured all these settings in the DAG config. However, if the data is increased by 100x (for example, summer vacation at Boston when a lot of international students come visit), the number of instances of jobs running in parallel needs to be increased to 32. As for the data quality check, I have one check on data availability, and one check on duplicates. 
+The reason why I chose airflow is that the whole end-to-end data ingestion needs to be done at monthly basis. Every month, Inside Airbnb will provide new month's data in their website. In this way, the jobs need to run at once in a month, and if it fails, backfill will be needed. I've configured all these settings in the DAG config. However, if the data is increased by 100x (for example, summer vacation at Boston when a lot of international students come visit), the number of instances of jobs running in parallel needs to be increased to 32. As for the data quality check, I have one check on data availability, and one check on table availability. 
 
 DAG config is as follows - 
 * The DAG does not have dependencies on past runs
