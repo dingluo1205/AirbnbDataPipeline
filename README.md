@@ -28,6 +28,7 @@ In this project, I used star schema to deisgn the data model. Please refer to th
 ## Section 4: Run ETL to Model the Data in Airflow 
 The reason why I chose airflow is that the whole end-to-end data ingestion needs to be done at monthly basis. Every month, Inside Airbnb will provide new month's data in their website. In this way, the jobs need to run at once in a month, and if it fails, backfill will be needed. I've configured all these settings in the DAG config. However, if the data is increased by 100x (for example, summer vacation at Boston when a lot of international students come visit), the number of instances of jobs running in parallel needs to be increased to 32. As for the data quality check, I have one check on data availability, and one check on duplicates. 
 
+DAG config is as follows - 
 * The DAG does not have dependencies on past runs
 * On failure, the task are retried 3 times
 * Retries happen every 5 minutes
