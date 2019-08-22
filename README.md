@@ -9,7 +9,7 @@ The scope of this project is to gather data from this open data source, load the
 ## Section 2: Explore and Assess the Data
 There are two types of data in this project. One is csv/csv.gz, and another is geojson. 
 
-### Files 
+### Input Data Files 
 There are mainly three files - calendar, reviews, and listings. Listings are saved in csv file, while the other two are saved in csv gz files. 
 
 Calendar - including listing id and the price and availability for that day
@@ -19,6 +19,20 @@ Reviews - including unique id for each reviewer and detailed comments
 Listings - including full descriptions and average review score for each listing 
 
 The files are stored per city and per month. So I stored them separately in my S3 bucket, paritioned on month and city. 
+
+### Output Code Files
+
+create_table.sql - including codes for creating all the tables (staging tables, dimension tables, and fact tables). It needs to be run before running the airflow dags. 
+
+airbnb_dag.py - dag file for all dag config, and task information 
+
+sql_queries.py in plugins.helpers - including codes for ETL and deleting data if necessary 
+
+stage_redshift.py in plugins.operators - including codes for staging csv data from s3 bucket to redshift 
+
+load_dimension/load_fact.py in plugins.operators - including codes for connecting to redshift, and executing codes for ETL 
+
+data_quality.py in plugins.operators - including codes for quality checks 
 
 ## Section 3: Define the Data Model
 In this project, I used star schema to deisgn the data model. Please refer to the design below - 
