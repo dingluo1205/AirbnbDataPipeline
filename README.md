@@ -35,6 +35,10 @@ DAG config is as follows -
 * Catchup is turned off
 
 Please refer to the graph view follows the flow shown in the image below - 
+![Airflow Graph View](/airflow.png)
+
+Here is the quality check result screenshot - 
+![Quality check](/quality%20check.png)
 
 ## Section 5: Sample analysis queries 
 
@@ -85,3 +89,8 @@ and a.room_type = 'Entire home/apt'
 
 ## Section 6: Limitations 
 As the data is provided by Airbnb, we do not have control over what data will flow into our data warehouse. Though I designed two data quality checks, it might not be enough. Also, this dataset lacks information for detailed reviewers. So the reviewer dimension table only has name and ID. It does not have suffficient information for us to deep dive into user behavior. Same as host information. As it is not complete as of now, I did not separate them into a different dimention table. 
+
+## Section 7: Difficulties of this Project
+1. Stage both CSV and GZIP CSV files into redshift, and at the same time, remove null value, add delimiter, and also need to ignore header. CSV file is different from JSON file. It has its own null value called 'NaN' which redshift is not able to identify. 
+
+2. The price field from calendar file has '$' but for analysis purpose, we need to get the numeric values only. But by simply removing '$' cannot solve the problem as the redshift cast function cannot take '1,000' into '1000.00'. I need to remove comma in advance as well. 
